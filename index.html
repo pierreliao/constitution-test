@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中医体质测试 - 科学精准的体质分析</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #f8f6f0 0%, #e8e2d5 100%);
+            min-height: 100vh;
+        }
+        .hero-title {
+            font-family: 'Noto Serif SC', serif;
+            background: linear-gradient(135deg, #4A7C59, #8B4513);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .question-card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(74, 124, 89, 0.2);
+        }
+        .option-btn {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .option-btn:hover {
+            border-color: #4A7C59;
+            background: rgba(74, 124, 89, 0.1);
+            transform: translateY(-2px);
+        }
+        .option-btn.selected {
+            background: #4A7C59;
+            color: white;
+            border-color: #4A7C59;
+        }
+        .progress-bar {
+            background: linear-gradient(90deg, #4A7C59, #8B4513);
+        }
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+    <!-- 粒子背景画布 -->
+    <div id="particles-canvas"></div>
+    
+    <!-- 主容器 -->
+    <div class="container mx-auto px-4 py-8 min-h-screen flex flex-col">
+        <!-- 头部区域 -->
+        <header class="text-center mb-8">
+            <div class="flex items-center justify-center mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-green-600 to-amber-700 rounded-full flex items-center justify-center mr-4">
+                    <span class="text-white font-bold text-xl">中</span>
+                </div>
+                <h1 class="hero-title text-4xl md:text-5xl font-bold">中医体质测试</h1>
+            </div>
+            <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                基于中医体质分类与判定标准，科学精准分析您的体质类型，提供个性化养生建议
+            </p>
+        </header>
+
+        <!-- 测试区域 -->
+        <main class="flex-1 flex items-center justify-center">
+            <!-- 欢迎页面 -->
+            <div id="welcome-section" class="text-center max-w-2xl">
+                <div class="question-card rounded-3xl p-8 shadow-xl">
+                    <div class="mb-6">
+                        <img src="https://kimi-web-img.moonshot.cn/img/img.cndoct.com/bfe68511b902932262775ab671c94e0cd17cacba.jpeg" 
+                             alt="中医体质" class="w-32 h-32 mx-auto rounded-full object-cover shadow-lg">
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">科学体质分析</h2>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        本测试基于中华中医药学会《中医体质分类与判定》标准，通过30道科学题目，
+                        精准分析您的体质类型，为您提供个性化的养生调理方案。
+                    </p>
+                    <div class="grid grid-cols-3 gap-4 mb-8 text-sm text-gray-600">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-green-600">30</div>
+                            <div>道科学题目</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-green-600">9</div>
+                            <div>种体质类型</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-green-600">3</div>
+                            <div>分钟完成</div>
+                        </div>
+                    </div>
+                    <button onclick="startTest()" class="bg-gradient-to-r from-green-600 to-amber-700 text-white px-8 py-3 rounded-full text-lg font-medium hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                        开始测试
+                    </button>
+                </div>
+            </div>
+
+            <!-- 测试题目区域 -->
+            <div id="test-section" class="w-full max-w-4xl hidden">
+                <!-- 进度条 -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm text-gray-600">测试进度</span>
+                        <span id="progress-text" class="text-sm text-gray-600">1 / 30</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div id="progress-bar" class="progress-bar h-2 rounded-full transition-all duration-500" style="width: 3.33%"></div>
+                    </div>
+                </div>
+
+                <!-- 题目卡片 -->
+                <div class="question-card rounded-3xl p-8 shadow-xl">
+                    <div class="text-center mb-8">
+                        <h3 id="question-title" class="text-2xl font-bold text-gray-800 mb-4"></h3>
+                        <p id="question-text" class="text-lg text-gray-600 leading-relaxed"></p>
+                    </div>
+
+                    <!-- 选项区域 -->
+                    <div id="options-container" class="space-y-4">
+                        <!-- 选项将通过JavaScript动态生成 -->
+                    </div>
+
+                    <!-- 下一题按钮 -->
+                    <div class="text-center mt-8">
+                        <button id="next-btn" onclick="nextQuestion()" disabled 
+                                class="bg-gray-400 text-white px-8 py-3 rounded-full text-lg font-medium cursor-not-allowed transition-all duration-300">
+                            下一题
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 加载中状态 -->
+            <div id="loading-section" class="hidden text-center">
+                <div class="question-card rounded-3xl p-8 shadow-xl">
+                    <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600 mx-auto mb-4"></div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">正在分析您的体质...</h3>
+                    <p class="text-gray-600">请稍候，我们正在为您生成个性化的体质分析报告</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>© 2025 dominical.cn - 专业的中医体质测试与养生指导</p>
+        </footer>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
