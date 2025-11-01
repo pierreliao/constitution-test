@@ -136,6 +136,44 @@
         </footer>
     </div>
 
-    <script src="products.js"></script>
+    <!-- ① 产品数据 -->
+<script src="products.js"></script>
+<!-- ② 正式购物车逻辑 -->
+<script src="cart.js"></script>
+<button onclick="addToCart(1)">加入购物车</button>    
 </body>
 </html>
+/* ========== cart.js ========== */
+/* 与 dominical.cn 正式购物车打通（WooCommerce GET 接口） */
+const SITE_CART_URL = 'https://www.dominical.cn/%e8%b4%ad%e7%89%a9%e8%bd%a6/';
+
+/* 统一加入购物车函数 */
+function addToCart(productId) {
+    // 从 products.js 里取商品
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
+    // 构造 WooCommerce 加购链接
+    const url = new URL(SITE_CART_URL);
+    url.searchParams.set('add-to-cart', productId);
+    url.searchParams.set('quantity', 1);
+
+    // 按钮动画
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '加入中...';
+    btn.disabled = true;
+
+    // 0.3s 后跳转（用户手感）
+    setTimeout(() => {
+        window.location.href = url.href;   // 真正写进购物车并跳转
+    }, 300);
+}
+
+/* 任意位置查看购物车 */
+function viewCart() {
+    window.location.href = SITE_CART_URL;
+}
+<button onclick="viewCart()" class="bg-green-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:shadow-lg transition-all duration-300">
+    查看购物车
+</button>
