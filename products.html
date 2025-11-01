@@ -139,31 +139,3 @@
     <script src="products.js"></script>
 </body>
 </html>
-<script src="cart.js"></script>
-/* ========== cart.js ========== */
-// 与 dominical.cn 正式购物车打通
-const SITE_CART_URL = 'https://www.dominical.cn/%e8%b4%ad%e7%89%a9%e8%bd%a6/';
-
-/**
- * 添加到购物车（真实接口）
- * @param {number} productId  products.js 里定义的 id
- */
-function addToCart(productId) {
-    // 从 products.js 里取出对应商品
-    const product = products.find(p => p.id === productId);
-    if (!product) return;
-
-    /* 1. 你的网店使用标准 WooCommerce GET 接口：
-          ?add-to-cart={id}&quantity={qty}   */
-    const addUrl = new URL(SITE_CART_URL);
-    addUrl.searchParams.set('add-to-cart', productId);
-    addUrl.searchParams.set('quantity', 1);
-
-    /* 2. 先跳转完成加购，再自动进入购物车页 */
-    window.location.href = addUrl.href;
-}
-
-/* 3. 可选：任意页面查看购物车 */
-function viewCart() {
-    window.location.href = SITE_CART_URL;
-}
