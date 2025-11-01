@@ -92,7 +92,7 @@ const constitutionInfo = {
             { title: "起居调养", content: "居住环境宜干燥，避免潮湿，保持规律作息。", icon: "🏠" }
         ],
         products: [
-            { name: "荷叶山楂饮", price: "¥8.9", link: "https://www.dominical.cn/%E5%95%86%E5%93%81/%e8%8d%b7%e5%8f%b6%e5%b1%b1%e6%a5%82%e9%a5%ae-%e5%8c%96%e7%97%b0%e6%b5%8a%e9%99%8d%e8%84%82%e6%b6%88%e7%a7%af%e6%96%b9/", image: "https://www.dominical.cn/qfy-content/uploads/2025/10/e3582a209ec9ed2d4876431e945d4285.png" },
+            { name: "荷叶山楂饮", price: "¥8.9", link: "https://www.dominical.cn/%E5%95%86%E5%93%81/%e8%8d%b7%e5%8f%b6%e5%b1%b1%e6%a5%82%e9%a5%ae-%e5%8c%96%e7%97%b0%e6%b5%8a%e9%99%8d%e8%84%82%e6%b6%88%e7%a7%cf%e6%96%b9/", image: "https://www.dominical.cn/qfy-content/uploads/2025/10/e3582a209ec9ed2d4876431e945d4285.png" },
             { name: "陈皮茯苓粥", price: "¥11.6", link: "https://www.dominical.cn/%E5%95%86%E5%93%81/%e9%99%88%e7%9a%ae%e8%8c%af%e8%8b%93%e7%b2%a5-%e7%90%86%e6%b0%94%e5%8c%96%e7%97%b0%e6%b8%97%e6%b9%bf%e9%a3%9f%e7%96%97%e6%96%b9/", image: "https://www.dominical.cn/qfy-content/uploads/2025/10/73571f734a86c75602caa77d02348554.png" },
             { name: "君子汤", price: "¥11.6", link: "https://www.dominical.cn/%E5%95%86%E5%93%81/%e5%90%9b%e5%ad%90%e6%b1%a4/", image: "https://www.dominical.cn/qfy-content/uploads/2025/10/16b8e4402487d2fc4eb29f326a811084.png" }
         ]
@@ -175,10 +175,13 @@ const constitutionInfo = {
     }
 };
 
+// 全局变量
+let primaryConstitution = '';
+
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', function() {
     loadResult();
-    
+
     // 添加页面加载动画
     anime({
         targets: '.result-card',
@@ -198,15 +201,15 @@ function loadResult() {
         window.location.href = 'index.html';
         return;
     }
-    
+
     const result = JSON.parse(resultData);
-    const primaryConstitution = result.primary;
+    primaryConstitution = result.primary;
     const constitutionData = constitutionInfo[primaryConstitution];
-    
+
     // 更新页面内容
     document.getElementById('constitution-name').textContent = constitutionData.name;
     document.getElementById('constitution-description').textContent = constitutionData.description;
-    
+
     // 更新体质特征
     const featuresContainer = document.getElementById('constitution-features');
     featuresContainer.innerHTML = '';
@@ -219,7 +222,7 @@ function loadResult() {
         `;
         featuresContainer.appendChild(featureCard);
     });
-    
+
     // 更新养生建议
     const recommendationsContainer = document.getElementById('recommendations-container');
     recommendationsContainer.innerHTML = '';
@@ -233,7 +236,7 @@ function loadResult() {
         `;
         recommendationsContainer.appendChild(recommendationCard);
     });
-    
+
     // 更新产品推荐
     const productsContainer = document.getElementById('products-container');
     productsContainer.innerHTML = '';
@@ -254,7 +257,7 @@ function loadResult() {
         `;
         productsContainer.appendChild(productCard);
     });
-    
+
     // 初始化图表
     initChart(result.scores);
 }
@@ -263,12 +266,12 @@ function loadResult() {
 function initChart(scores) {
     const chartDom = document.getElementById('constitution-chart');
     const myChart = echarts.init(chartDom);
-    
+
     const data = Object.entries(scores).map(([name, value]) => ({
         name,
         value
     }));
-    
+
     const option = {
         title: {
             text: '九种体质评分对比',
@@ -315,9 +318,9 @@ function initChart(scores) {
             }
         }]
     };
-    
+
     myChart.setOption(option);
-    
+
     // 添加图表动画
     setTimeout(() => {
         myChart.dispatchAction({
