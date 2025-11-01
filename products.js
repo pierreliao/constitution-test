@@ -466,8 +466,7 @@ function createProductCard(product) {
                 <span>已售 ${product.sales} 件</span>
             </div>
             <div class="flex space-x-2">
-                <button onclick="addToCart(${product.id})" class="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-full text-sm font-medium hover:bg-gray-200 transition-all duration-300">
-                    加入购物车
+               
                 </button>
                 <a href="${product.link}" target="_blank" class="flex-1 bg-gradient-to-r from-green-600 to-amber-700 text-white py-2 px-4 rounded-full text-sm font-medium text-center hover:shadow-lg transition-all duration-300">
                     立即购买
