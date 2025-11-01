@@ -75,6 +75,7 @@ const constitutionInfo = {
         products: [
             { name: "百合银耳羹", price: "¥10.7", link: "https://www.dominical.cn/%E5%95%86%E5%93%81/%e7%99%be%e5%90%88%e9%93%b6%e8%80%b3%e7%be%b9/", image: "https://www.dominical.cn/qfy-content/uploads/2025/10/a3215c265c8fffc5d8bbb2cee3bb9385.png" },
             { name: "麦冬沙参玉竹老鸭汤", price: "¥14.3", link: "https://www.dominical.cn/%E5%95%86%E5%93%81/%e9%ba%a6%e5%86%ac%e6%b2%99%e5%8f%82%e7%8e%89%e7%ab%b9%e8%80%81%e9%b8%ad%e6%b1%a4/", image: "https://www.dominical.cn/qfy-content/uploads/2025/10/20a1a511dbde445e6335e5b36d462c93.png" },
+            { name: "石斛生地茶", price: "¥14.3", link: "https://www.dominical.cn/%E5%95%86%E5%93%81/%e7%9f%b3%e6%96%9b%e7%94%9f%e5%9c%b0%e8%8c%b6/", image: "https://www.dominical.cn/qfy-content/uploads/2025/10/03e18fac7016967907a467ddd8d7dcf1.png" }
         ]
     },
     "痰湿质": {
@@ -130,6 +131,8 @@ const constitutionInfo = {
         ],
         products: [
             { name: "黑豆川芎粥", price: "¥14.3", link: "https://www.dominical.cn/%E5%95%86%E5%93%81/%e9%bb%91%e8%b1%86%e5%b7%9d%e8%8a%8e%e7%b2%a5/", image: "https://www.dominical.cn/qfy-content/uploads/2025/10/d75debf11d8668c4894c79d3c9728cb1.png" },
+            { name: "山楂丹参蜂蜜冰糖饮", price: "¥17.9", link: "https://www.dominical.cn/%E5%95%86%E5%93%81/%e5%b1%b1%e6%a5%82%e4%b8%b9%e5%8f%82%e8%9c%82%e8%9c%9c%e5%86%b0%e7%b3%96%e9%a5%ae/", image: "https://www.dominical.cn/qfy-content/uploads/2025/10/1d07431613fa995c71d327c6875cf130.png" },
+            { name: "山桃蜂蜜饮", price: "¥14.3", link: "https://www.dominical.cn/%E5%95%86%E5%93%81/%e5%b1%b1%e6%a1%83%e8%9c%82%e8%9c%9c%e9%a5%ae/", image: "https://www.dominical.cn/qfy-content/uploads/2025/10/37015f3441f1519aea688bc92b71750c.png" }
         ]
     },
     "气郁质": {
