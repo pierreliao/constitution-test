@@ -72,7 +72,7 @@ const products = [
         id: 6,
         name: "当归干姜甘草大枣汤",
         price: 19.7,
-        originalPrice: 21.9q,
+        originalPrice: 21.9,
         category: "tea",
         image: "https://www.dominical.cn/qfy-content/uploads/2025/10/42281e81ef6f494c1e877f557e2ff0bc.png",
         description: "温补脾胃、养血安神，适合阳虚体质",
