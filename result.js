@@ -336,35 +336,24 @@ function retakeTest() {
 
 // 分享结果
 function shareResult() {
-    const resultData = localStorage.getItem('constitutionTestResult');
-    if (!resultData) return;
-    
-    const result = JSON.parse(resultData);
-    const constitutionName = result.primary;
-    
-    if (navigator.share) {
-        navigator.share({
-            title: '我的中医体质测试结果',
-            text: `我刚完成了中医体质测试，结果是${constitutionName}！快来测试一下你的体质吧！`,
-            url: window.location.href
+    const text = `我刚完成了中医体质测试，结果是${primaryConstitution}！快来测试吧！\n${location.href}`;
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert('结果已复制到剪贴板，快去分享给朋友吧！');
+        }).catch(() => {
+            fallbackCopy(text);
         });
     } else {
-        // 复制到剪贴板
-        const shareText = `我刚完成了中医体质测试，结果是${constitutionName}！快来测试一下你的体质吧！\n\n测试地址：${window.location.origin}`;
-        
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(shareText).then(() => {
-                alert('测试结果已复制到剪贴板，快去分享给朋友吧！');
-            });
-        } else {
-            // 降级方案
-            const textArea = document.createElement('textarea');
-            textArea.value = shareText;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            alert('测试结果已复制到剪贴板，快去分享给朋友吧！');
-        }
+        fallbackCopy(text);
+    }
+
+    function fallbackCopy(txt) {
+        const ta = document.createElement('textarea');
+        ta.value = txt;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        alert('结果已复制，快去分享给朋友吧！');
     }
 }
