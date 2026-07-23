@@ -26,8 +26,11 @@ const constitutionInfo = {
         description: "元气不足，容易疲劳，气短懒言，易出虚汗，抵抗力较弱。",
         features: [
             { title: "形体特征", content: "肌肉不健壮" },
-            { title: "常见表现", content: "平素语音低怯，气短懒言，容易疲劳，精神不振，易出虚汗，抵抗力差，舌淡红，舌体胖大，舌边有齿痕，脉象虚缓，面色偏黄或晄白，目光少神，口淡，唇色少华，毛发不华，头晕，健忘，大便正常或有时便秘，但不结硬，或者大便不成形，便后仍感觉未拉完，小便有时候正常有时候偏多或偏少" },
-            { title: "心理特征", content: "性格内向，情绪不稳定，胆小不喜冒险" }
+            { title: "常见表现", content: "平素语音低怯，气短懒言，容易疲劳，精神不振，易出虚汗，抵抗力差，舌淡红，舌体胖大，舌边有齿痕，脉象虚缓" },
+            { title: "其他表现", content: "面色偏黄或晄白，目光少神，口淡，唇色少华，毛发不华，头晕，健忘，大便正常或有时便秘，但不结硬，或者大便不成形，便后仍感觉未拉完，小便有时候正常有时候偏多或偏少" }，
+            { title: "心理特征", content: "性格内向，情绪不稳定，胆小不喜冒险" }，
+            { title: "发病倾向", content: "平素体质虚弱，营卫不固容易感冒。或者病后抗病能力弱，容易迁延不愈。或者容易患内脏下垂、虚劳等疾病" }，
+            { title: "适应能力", content: "对外界环境适应能力弱，不耐寒邪、风邪以及暑邪" }
         ],
         recommendations: [
             { title: "饮食调理", content: "多吃具有益气健脾作用的食物，如黄豆、白扁豆、鸡肉、泥鳅、香菇、大枣、桂圆、蜂蜜等。", icon: "🍲" },
@@ -211,17 +214,22 @@ function loadResult() {
     document.getElementById('constitution-description').textContent = constitutionData.description;
 
     // 更新体质特征
-    const featuresContainer = document.getElementById('constitution-features');
-    featuresContainer.innerHTML = '';
-    constitutionData.features.forEach(feature => {
-        const featureCard = document.createElement('div');
-        featureCard.className = 'bg-white p-6 rounded-xl shadow-md';
-        featureCard.innerHTML = `
-            <h4 class="text-lg font-bold text-gray-800 mb-2">${feature.title}</h4>
-            <p class="text-gray-600">${feature.content}</p>
-        `;
-        featuresContainer.appendChild(featureCard);
-    });
+const featuresContainer = document.getElementById('constitution-features');
+featuresContainer.innerHTML = '';
+
+// 动态计算列数：<=3个用3列，4-6个用2列或3列自适应
+const featureCount = constitutionData.features.length;
+featuresContainer.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8';
+
+constitutionData.features.forEach(feature => {
+    const featureCard = document.createElement('div');
+    featureCard.className = 'bg-white p-6 rounded-xl shadow-md flex flex-col';
+    featureCard.innerHTML = `
+        <h4 class="text-lg font-bold text-gray-800 mb-3 border-b border-gray-200 pb-2">${feature.title}</h4>
+        <p class="text-gray-600 text-sm leading-relaxed flex-grow">${feature.content || '暂无详细说明'}</p>
+    `;
+    featuresContainer.appendChild(featureCard);
+});
 
     // 更新养生建议
     const recommendationsContainer = document.getElementById('recommendations-container');
