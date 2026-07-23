@@ -207,67 +207,93 @@ function loadResult() {
 
     const result = JSON.parse(resultData);
     primaryConstitution = result.primary;
+    
+    // 安全检查：如果体质类型不在配置中
     const constitutionData = constitutionInfo[primaryConstitution];
+    if (!constitutionData) {
+        console.error('未找到体质配置:', primaryConstitution);
+        document.getElementById('constitution-name').textContent = '未知体质';
+        document.getElementById('constitution-description').textContent = '系统暂时无法识别该体质类型，请联系客服。';
+        return;
+    }
 
     // 更新页面内容
     document.getElementById('constitution-name').textContent = constitutionData.name;
     document.getElementById('constitution-description').textContent = constitutionData.description;
 
-    // 更新体质特征
-const featuresContainer = document.getElementById('constitution-features');
-featuresContainer.innerHTML = '';
-
-// 动态计算列数：<=3个用3列，4-6个用2列或3列自适应
-const featureCount = constitutionData.features.length;
-featuresContainer.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8';
-
-constitutionData.features.forEach(feature => {
-    const featureCard = document.createElement('div');
-    featureCard.className = 'bg-white p-6 rounded-xl shadow-md flex flex-col';
-    featureCard.innerHTML = `
-        <h4 class="text-lg font-bold text-gray-800 mb-3 border-b border-gray-200 pb-2">${feature.title}</h4>
-        <p class="text-gray-600 text-sm leading-relaxed flex-grow">${feature.content || '暂无详细说明'}</p>
-    `;
-    featuresContainer.appendChild(featureCard);
-});
+    // 更新体质特征（修复后的代码）
+    const featuresContainer = document.getElementById('constitution-features');
+    featuresContainer.innerHTML = '';
+    
+    // 动态设置网格：根据数量自动适配
+    const featureCount = constitutionData.features ? constitutionData.features.length : 0;
+    if (featureCount <= 3) {
+        featuresContainer.className = 'grid grid-cols-1 md:grid-cols-3 gap-6 mt-8';
+    } else if (featureCount <= 4) {
+        featuresContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-6 mt-8';
+    } else {
+        featuresContainer.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8';
+    }
+    
+    if (constitutionData.features && constitutionData.features.length > 0) {
+        constitutionData.features.forEach(feature => {
+            const featureCard = document.createElement('div');
+            featureCard.className = 'bg-white p-6 rounded-xl shadow-md flex flex-col h-full';
+            featureCard.innerHTML = `
+                <h4 class="text-lg font-bold text-gray-800 mb-3 border-b border-gray-200 pb-2">${feature.title || '未命名'}</h4>
+                <p class="text-gray-600 text-sm leading-relaxed flex-grow">${feature.content || '暂无详细说明'}</p>
+            `;
+            featuresContainer.appendChild(featureCard);
+        });
+    } else {
+        featuresContainer.innerHTML = '<p class="text-gray-500 col-span-full text-center">暂无特征数据</p>';
+    }
 
     // 更新养生建议
     const recommendationsContainer = document.getElementById('recommendations-container');
     recommendationsContainer.innerHTML = '';
-    constitutionData.recommendations.forEach(recommendation => {
-        const recommendationCard = document.createElement('div');
-        recommendationCard.className = 'recommendation-card bg-white p-6 rounded-xl shadow-md';
-        recommendationCard.innerHTML = `
-            <div class="text-3xl mb-3">${recommendation.icon}</div>
-            <h4 class="text-lg font-bold text-gray-800 mb-2">${recommendation.title}</h4>
-            <p class="text-gray-600">${recommendation.content}</p>
-        `;
-        recommendationsContainer.appendChild(recommendationCard);
-    });
+    
+    if (constitutionData.recommendations && constitutionData.recommendations.length > 0) {
+        constitutionData.recommendations.forEach(recommendation => {
+            const recommendationCard = document.createElement('div');
+            recommendationCard.className = 'recommendation-card bg-white p-6 rounded-xl shadow-md';
+            recommendationCard.innerHTML = `
+                <div class="text-3xl mb-3">${recommendation.icon || '🌿'}</div>
+                <h4 class="text-lg font-bold text-gray-800 mb-2">${recommendation.title || '建议'}</h4>
+                <p class="text-gray-600 text-sm leading-relaxed">${recommendation.content || '暂无建议'}</p>
+            `;
+            recommendationsContainer.appendChild(recommendationCard);
+        });
+    }
 
     // 更新产品推荐
     const productsContainer = document.getElementById('products-container');
     productsContainer.innerHTML = '';
-    constitutionData.products.forEach(product => {
-        const productCard = document.createElement('div');
-        productCard.className = 'product-card bg-white rounded-xl shadow-md overflow-hidden';
-        productCard.innerHTML = `
-            <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
-            <div class="p-6">
-                <h4 class="text-lg font-bold text-gray-800 mb-2">${product.name}</h4>
-                <div class="flex justify-between items-center">
-                    <span class="text-xl font-bold text-green-600">${product.price}</span>
-                    <a href="${product.link}" target="_blank" class="bg-gradient-to-r from-green-600 to-amber-700 text-white px-4 py-2 rounded-full text-sm font-medium hover:shadow-lg transition-all duration-300">
-                        立即购买
-                    </a>
+    
+    if (constitutionData.products && constitutionData.products.length > 0) {
+        constitutionData.products.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card bg-white rounded-xl shadow-md overflow-hidden flex flex-col';
+            productCard.innerHTML = `
+                <img src="${product.image || ''}" alt="${product.name || '产品'}" class="w-full h-48 object-cover" onerror="this.src='https://via.placeholder.com/300x200?text=暂无图片'">
+                <div class="p-6 flex flex-col flex-grow">
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">${product.name || '未命名产品'}</h4>
+                    <div class="flex justify-between items-center mt-auto">
+                        <span class="text-xl font-bold text-green-600">${product.price || '¥0'}</span>
+                        <a href="${product.link || '#'}" target="_blank" class="bg-gradient-to-r from-green-600 to-amber-700 text-white px-4 py-2 rounded-full text-sm font-medium hover:shadow-lg transition-all duration-300">
+                            立即购买
+                        </a>
+                    </div>
                 </div>
-            </div>
-        `;
-        productsContainer.appendChild(productCard);
-    });
+            `;
+            productsContainer.appendChild(productCard);
+        });
+    }
 
     // 初始化图表
-    initChart(result.scores);
+    if (result.scores) {
+        initChart(result.scores);
+    }
 }
 
 // 初始化体质分析图表
