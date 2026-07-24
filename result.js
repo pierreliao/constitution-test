@@ -288,28 +288,28 @@ function loadResult() {
     }
 
     // 更新产品推荐
-    const productsContainer = document.getElementById('products-container');
-    productsContainer.innerHTML = '';
-    
-    if (constitutionData.products && constitutionData.products.length > 0) {
-        constitutionData.products.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.className = 'product-card bg-white rounded-xl shadow-md overflow-hidden flex flex-col';
-            productCard.innerHTML = `
-                <img src="${product.image || ''}" alt="${product.name || '产品'}" class="w-full h-48 object-cover" onerror="this.src='https://via.placeholder.com/300x200?text=暂无图片'">
-                <div class="p-6 flex flex-col flex-grow">
-                    <h4 class="text-lg font-bold text-gray-800 mb-2">${product.name || '未命名产品'}</h4>
-                    <div class="flex justify-between items-center mt-auto">
-                        <span class="text-xl font-bold text-green-600">${product.price || '¥0'}</span>
-                        <a href="${product.link || '#'}" target="_blank" class="bg-gradient-to-r from-green-600 to-amber-700 text-white px-4 py-2 rounded-full text-sm font-medium hover:shadow-lg transition-all duration-300">
-                            立即购买
-                        </a>
-                    </div>
+const productsContainer = document.getElementById('products-container');
+productsContainer.innerHTML = '';
+
+if (constitutionData.products && constitutionData.products.length > 0) {
+    constitutionData.products.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card bg-white rounded-xl shadow-md overflow-hidden flex flex-col';
+        productCard.innerHTML = `
+            <img src="${product.image || ''}" alt="${product.name || '产品'}" class="w-full h-48 object-cover" onerror="this.src='https://via.placeholder.com/300x200?text=暂无图片'">
+            <div class="p-6 flex flex-col flex-grow">
+                <h4 class="text-lg font-bold text-gray-800 mb-2">${product.name || '未命名产品'}</h4>
+                <div class="flex justify-between items-center mt-auto">
+                    <span class="text-xl font-bold text-green-600">${product.price || '¥0'}</span>
+                    <a href="${product.link || '#'}" target="_blank" onclick="trackProductClick('${(product.name || '未命名').replace(/'/g, "\\'")}')" class="bg-gradient-to-r from-green-600 to-amber-700 text-white px-4 py-2 rounded-full text-sm font-medium hover:shadow-lg transition-all duration-300">
+                        立即购买
+                    </a>
                 </div>
-            `;
-            productsContainer.appendChild(productCard);
-        });
-    }
+            </div>
+        `;
+        productsContainer.appendChild(productCard);
+    });
+}
 
     // 初始化图表
     if (result.scores) {
