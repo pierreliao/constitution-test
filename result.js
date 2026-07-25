@@ -394,10 +394,10 @@ function retakeTest() {
 
 // 分享结果
 function shareResult() {
-    const text = `我刚完成了中医体质测试，结果是${primaryConstitution}！快来测试吧！\n${location.href}`;
+    const text = `我刚完成了中医体质测试，结果是${primaryConstitution}！获取专属调理方案和推荐食材包，快来测试吧！\n${location.href}`;
     if (navigator.clipboard) {
         navigator.clipboard.writeText(text).then(() => {
-            alert('结果已复制到剪贴板，快去分享给朋友吧！还可以获取专属调理方案和推荐食材包');
+            alert('结果已复制到剪贴板，快去分享给朋友吧！');
         }).catch(() => {
             fallbackCopy(text);
         });
